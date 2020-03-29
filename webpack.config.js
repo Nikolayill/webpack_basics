@@ -21,6 +21,9 @@ const msleep = milliSeconds =>
     )
 ;
 
+const json_server_url = 'http://localhost:'+(process.env.JSON_SERVER_PORT || 3000)+'/';
+console.log("Proxying api to", json_server_url);
+
 module.exports = {
     entry: PATHS.source + '/index.js',
     output: {
@@ -29,14 +32,12 @@ module.exports = {
     },
     devServer: { //https://github.com/webpack/webpack-dev-server/tree/master/examples/general
         proxy: {
-            '/api/bypass-example': {
-                bypass: (req, res) => {
-                    console.log("proxy sleeping...");
-                    msleep(2000);
-                    console.log("proxy send response");
-                    return res.send({
-                    mssg: 'proxy server - Message came from bypass property in webpack'
-                })},
+            '/api': {
+                target: json_server_url,    //перенаправление запросов начинающихся со /api на json-server
+                // changeOrigin: true,         //
+                pathRewrite: {
+                    '^/api': '',            //удаление префикса из исходного url
+                },
             },
         },
     },

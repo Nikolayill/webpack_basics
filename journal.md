@@ -24,3 +24,23 @@
 - https://github.com/typicode/json-server
 - https://spin.atomicobject.com/2018/10/08/mock-api-json-server/
 - https://stackoverflow.com/questions/57926892/how-to-start-json-server-with-webpack
+
+#### Проксирование запросов из WDS в json-server
+Что бы упростить запросы к api, нужно проксировать запросы к json-server который выступает
+в качестве имитации бэкэнда, но запущен на другом порту.
+Для этого в [webpack.config.js](./webpack.config.js) нужно добавить настройки прокси:
+```javascript
+...
+    devServer: {
+        proxy: {
+            '/api': {
+                target: json_server_url,    //перенаправление запросов начинающихся со /api на json-server
+                pathRewrite: {
+                    '^/api': '',            //удаление префикса из исходного url
+                },
+            },
+        },
+    },
+...
+```
+Здесь в переменной `json_server_url` определен url на который обслуживает json-server (см. [server.js](./server.js)) 
