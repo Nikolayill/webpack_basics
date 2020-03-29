@@ -5,11 +5,15 @@
   "repository": {},
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "concurrently --kill-others \"yarn start-json-server\" \"yarn start-wds\"",
+    "start-wds": "webpack-dev-server",
+    "start-json-server": "node ./server.js",
     "serv": "static build"
   },
   "devDependencies": {
+    "concurrently": "^5.1.0",
     "html-webpack-plugin": "^4.0.2",
+    "json-server": "^0.16.1",
     "jquery": "^3.4.1",
     "mobx": "^5.15.4",
     "node-static": "^0.7.9",
